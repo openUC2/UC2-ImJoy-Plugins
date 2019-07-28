@@ -50,7 +50,7 @@
     "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"
    ],
    "dependencies": [
-    "bionanoimaging/UC2-GIT/tree/master/SOFTWARE/IMJOY:UC2 Holorecon"
+    "bionanoimaging/UC2-ImJoy-GIT:UC2 Holorecon"
    ],
    "uri": "repository/UC2_Inline_Hologram_Reconstruction.imjoy.html"
   }
