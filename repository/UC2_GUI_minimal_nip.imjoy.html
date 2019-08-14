@@ -38,7 +38,7 @@ class ImJoyPlugin {
     processBtn.onclick = async ()=>{
       try{
         const base64_url = canvas.toDataURL()
-        const pluginHolorecon = await api.getPlugin('UC2 Holorecon')
+        const pluginHolorecon = await api.getPlugin('UC2_nip_demo')
         await pluginHolorecon.process_hologram(base64_url)
         await api.alert('Process done!')
       }
