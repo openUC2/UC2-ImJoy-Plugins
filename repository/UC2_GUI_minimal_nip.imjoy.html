@@ -38,8 +38,8 @@ class ImJoyPlugin {
     processBtn.onclick = async ()=>{
       try{
         const base64_url = canvas.toDataURL()
-        const pluginHolorecon = await api.getPlugin('UC2_nip_demo')
-        await pluginHolorecon.process_hologram(base64_url)
+        const pluginNIP = await api.getPlugin('UC2_nip_demo')
+        await pluginNIP.nip_demo(base64_url)
         await api.alert('Process done!')
       }
       catch(e){
@@ -92,8 +92,8 @@ class ImJoyPlugin {
     fileInput.addEventListener("change", async ()=>{
       try{
         const base64_url = await readImageFile()
-        const pluginHolorecon = await api.getPlugin('UC2 Holorecon')
-        await pluginHolorecon.process_hologram(base64_url)
+        const pluginNIP = await api.getPlugin('UC2_nip_demo')
+        await pluginNIP.nip_demo(base64_url)
         await api.alert('Process done!')
       }
       catch(e){

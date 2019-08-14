@@ -1,20 +1,20 @@
 <config lang="json">
 {
-  "name": "UC2_nip_demo",
-  "type": "native-python",
-  "version": "0.0.2",
-  "api_version": "0.1.2",
-  "description": "Minimal working example for the NIP toolbox.",
-  "tags": [],
-  "ui": [],
-  "inputs": null,
-  "outputs": null,
-  "flags": [],
-  "icon": null,
-  "env": null,
-  "runnable": false,
-  "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "tifffile", "scikit-image", "python-bioformats", "cmd:pip install git+https://NanoImagingUser:NanoImagingUser@gitlab.com/bionanoimaging/nanoimagingpack"],
-  "dependencies": []
+    "name": "UC2_nip_demo",
+    "type": "native-python",
+    "version": "0.0.2",
+    "api_version": "0.1.2",
+    "description": "Minimal working example for the NIP toolbox.",
+    "tags": [],
+    "ui": [],
+    "inputs": null,
+    "outputs": null,
+    "flags": [],
+    "icon": null,
+    "env": null,
+    "runnable": false,
+    "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "tifffile", "cmd:pip install git+https://NanoImagingUser:NanoImagingUser@gitlab.com/bionanoimaging/nanoimagingpack"],
+    "dependencies": []
 }
 </config>
 
@@ -88,6 +88,8 @@ class ImJoyPlugin():
                 print('Could not print to old window. New window created.')
         
         await api.showMessage('done!')
+
+api.export(ImJoyPlugin())
 
 
 
