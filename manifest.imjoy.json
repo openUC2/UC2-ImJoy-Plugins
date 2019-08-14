@@ -76,6 +76,33 @@
     "bionanoimaging/UC2-ImJoy-GIT:UC2 Holorecon"
    ],
    "uri": "repository/UC2__GUI_Inline_Hologram_Reconstruction.imjoy.html"
+  },
+  {
+   "name": "UC2_nip_demo",
+   "type": "native-python",
+   "version": "0.0.2",
+   "api_version": "0.1.2",
+   "description": "Minimal working example for the NIP toolbox.",
+   "tags": [],
+   "ui": [],
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": null,
+   "env": null,
+   "runnable": false,
+   "requirements": [
+    "numpy",
+    "matplotlib",
+    "pillow",
+    "scikit-image",
+    "tifffile",
+    "scikit-image",
+    "python-bioformats",
+    "cmd:pip install git+https://NanoImagingUser:NanoImagingUser@gitlab.com/bionanoimaging/nanoimagingpack"
+   ],
+   "dependencies": [],
+   "uri": "repository/UC2_nip_demo.imjoy.html"
   }
  ],
  "collections": []
