@@ -5,6 +5,29 @@
  "version": "0.2.0",
  "plugins": [
   {
+   "name": "Minimal NIP Example for ImJoy",
+   "type": "window",
+   "version": "0.0.2",
+   "api_version": "0.1.2",
+   "description": "Minimal Working example for the NIP toolbox in ImJoy.",
+   "tags": [],
+   "ui": [],
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": "swap_horiz",
+   "env": null,
+   "requirements": [
+    "https://unpkg.com/spectre.css/dist/spectre.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-exp.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"
+   ],
+   "dependencies": [
+    "bionanoimaging/UC2-ImJoy-GIT:UC2_nip_demo"
+   ],
+   "uri": "repository/UC2_GUI_minimal_nip.imjoy.html"
+  },
+  {
    "name": "UC2 Holorecon",
    "type": "native-python",
    "version": "0.0.2",
@@ -52,7 +75,7 @@
    "dependencies": [
     "bionanoimaging/UC2-ImJoy-GIT:UC2 Holorecon"
    ],
-   "uri": "repository/UC2_Inline_Hologram_Reconstruction.imjoy.html"
+   "uri": "repository/UC2__GUI_Inline_Hologram_Reconstruction.imjoy.html"
   }
  ],
  "collections": []
