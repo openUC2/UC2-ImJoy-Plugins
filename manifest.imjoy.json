@@ -5,6 +5,31 @@
  "version": "0.2.0",
  "plugins": [
   {
+   "name": "Jamin Lebedeff Reconstruction",
+   "type": "window",
+   "version": "0.0.2",
+   "api_version": "0.1.19",
+   "description": "Sending Image to the IMJOY plugin to reconstruct the quantitative phase.",
+   "tags": [],
+   "ui": [
+    "Regularization parameter for TV regularizer: {id:'reg_tv', type: 'number', min: 0, placeholder:1}"
+   ],
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": "swap_horiz",
+   "env": null,
+   "requirements": [
+    "https://unpkg.com/spectre.css/dist/spectre.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-exp.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"
+   ],
+   "dependencies": [
+    "bionanoimaging/UC2-ImJoy-GIT:tools_Jamin_Lebedeff"
+   ],
+   "uri": "repository/UC2_GUI_Jamin_Lebedeff_Reconstruction.imjoy.html"
+  },
+  {
    "name": "Minimal NIP Example for ImJoy",
    "type": "window",
    "version": "0.0.2",
@@ -97,12 +122,35 @@
     "pillow",
     "scikit-image",
     "tifffile",
-    "scikit-image",
-    "python-bioformats",
     "cmd:pip install git+https://NanoImagingUser:NanoImagingUser@gitlab.com/bionanoimaging/nanoimagingpack"
    ],
    "dependencies": [],
    "uri": "repository/UC2_nip_demo.imjoy.html"
+  },
+  {
+   "name": "tools_Jamin_Lebedeff",
+   "type": "native-python",
+   "version": "0.0.2",
+   "api_version": "0.1.19",
+   "description": "Reconstruct an RGB image acquired with a cellphone camera on a Jamin Lebedeff Microscope.",
+   "tags": [],
+   "ui": [],
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": null,
+   "env": null,
+   "runnable": false,
+   "requirements": [
+    "numpy",
+    "tensorflow",
+    "matplotlib",
+    "h5py",
+    "pillow",
+    "scikit-image"
+   ],
+   "dependencies": [],
+   "uri": "repository/UC2_tools_Jamin_Lebedeff.imjoy.html"
   }
  ],
  "collections": []

@@ -1,0 +1,169 @@
+<docs lang="markdown">
+This Plugin converts an RGB frame from a cellphone into a quantitative phase image.
+
+# Abstract 
+This code is reconstructing the optical path difference (OPD) from RGB images acquired with a cellphone camera. This is done by providing an RGB-calibration 
+ measurement with known OPD (e.g. an optical fiber). Currently this OPD-map  is computed in MATLAB and preloaded as a .mat file. 
+ The idea is to minimize the L2 distance between a measured RGB-pixel and the previously generated OPD/RGB-lookup table. In order to minimize the effect of 
+ phase discontuinites, we add TV regularization and use standard Gradient-Descent to minimize a combined loss-function:
+ min -> OPD ||(R(OPD)-R_meas)^2 +  (G(OPD)-G_meas)^2 +  (B(OPD)-B_meas)^2 +|| + TV(OPD)
+
+
+</docs>
+
+<config lang="json">
+{
+  "name": "Jamin Lebedeff Reconstruction",
+  "type": "window",
+  "version": "0.0.2",
+  "api_version": "0.1.19",
+  "description": "Sending Image to the IMJOY plugin to reconstruct the quantitative phase.",
+  "tags": [],
+  "ui": [
+          "Regularization parameter for TV regularizer: {id:'reg_tv', type: 'number', min: 0, placeholder:1}"
+        ],
+  "inputs": null,
+  "outputs": null,
+  "flags": [],
+  "icon": "swap_horiz",
+  "env": null,
+  "requirements": [
+    "https://unpkg.com/spectre.css/dist/spectre.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-exp.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"
+  ],
+  "dependencies": ["bionanoimaging/UC2-ImJoy-GIT:tools_Jamin_Lebedeff"]
+}
+</config>
+
+<script lang="javascript">
+class ImJoyPlugin {
+  async setup() {
+
+    // bind predict() to the button
+    const processBtn = document.getElementById('process-btn');
+    const fileInput = document.getElementById("file-input");
+    
+    const canvas = document.getElementById("input-canvas");
+    processBtn.onclick = async ()=>{
+      try{
+        const base64_url = canvas.toDataURL()
+        const pluginHolorecon = await api.getPlugin('tools_Jamin_Lebedeff')
+        await pluginHolorecon.process_rgb(base64_url)
+        await api.alert('Process done!')
+      }
+      catch(e){
+        console.error(e)
+        await api.alert('Failed to process, error: ' + e)
+      }
+    }
+
+    // Display image when a file is selected.
+    const drawImage = (url, callback)=>{
+        var img = new Image()
+        img.crossOrigin = "anonymous"
+        img.onload = function(){
+            const ctx = canvas.getContext("2d");
+            canvas.width = Math.min(this.width, 512);
+            canvas.height= Math.min(this.height, parseInt(512*this.height/this.width), 1024);
+            // draw the img into canvas
+            ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+            if(callback) callback(canvas.toDataURL());
+        }
+        img.src = url;
+    }
+
+    //load a preset image
+
+    // drawImage('https://raw.githubusercontent.com/bionanoimaging/UC2-GIT/master/WORKSHOP/INLINE-HOLOGRAMM/PYTHON/hologram_mouse.jpg')
+
+    const readImageFile = ()=>{
+        return new Promise((resolve, reject)=>{
+            const U = window.URL || window.webkitURL;
+            // this works for safari
+            if(U.createObjectURL){
+                drawImage(U.createObjectURL(fileInput.files[0]), resolve)
+            }
+            // fallback
+            else{
+                var fr = new FileReader();
+                // when image is loaded, set the src of the image where you want to display it
+                fr.onload = function(e) {
+                    drawImage(e.target.result, resolve)
+                };
+                fr.onerror = reject
+                // fill fr with image data
+                fr.readAsDataURL(fileInput.files[0]);
+            }
+        })
+    }
+
+    // If user selected a new file or take a new photo, load it and do prediction.
+    fileInput.addEventListener("change", async ()=>{
+      try{
+        const base64_url = await readImageFile()
+        const pluginHolorecon = await api.getPlugin('tools_Jamin_Lebedeff')
+        await pluginHolorecon.process_rgb(base64_url)
+        await api.alert('Process done!')
+      }
+      catch(e){
+        console.error(e)
+        await api.alert('Failed to process, error: ' + e)
+      }
+
+    }, true);
+
+
+    const statusElement = document.getElementById("status");
+    //document.getElementById("hero_title").innerHTML = 'Model loaded'
+    statusElement.innerHTML = '1. Open image (.png/.jpg) or use pre-loaded image. <br> 2. Click `Compute` to reconstruct the image!';
+
+    // Display the predict button and file selection
+    processBtn.style.display = "inline";
+    fileInput.style.display = "inline";
+  }
+  run(){
+
+  }
+}
+api.export(new ImJoyPlugin())
+</script>
+
+
+<window lang="html">
+  <div>
+    <!–– Header bar ––>
+    <div class="hero hero-sm bg-secondary">
+        <div class="mx-2">
+            <!-- <h3 id="hero_title"></h3> -->
+            <p id="status"></p>
+        </div>
+    </div>
+
+   <!–– Buttons ––>
+   <div class="p-1">
+        <input  style="display: none;" id="file-input" accept="image/*" capture="camera" type="file"/>
+        <br>
+        <button class="btn btn-primary" style="display: none;" id="process-btn">Compute</button>
+    </div>
+
+    <!–– canvas ––>
+    <div class="p-1">
+        <canvas id="input-canvas" style="width: 100%; object-fit: cover;"></canvas>
+    </div>
+  </div>
+</window>
+
+<style lang="css">
+.p-1 {
+    text-align: center;
+}
+.p-1 input{
+    width:90%;
+    margin:10px;
+}
+.p-1 button{
+    width:90%;
+    margin:10px;
+}
+</style>
