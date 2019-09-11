@@ -57,28 +57,11 @@ class ImJoyPlugin():
     async def process(self):
         await api.alert('processing with param1='+ str(self.param1))
 
-    def imshow_overlay(im, mask, alpha=0.5, color='red', **kwargs):
-        """Show semi-transparent red mask over an image"""
-        mask = mask > 0
-        mask = np.ma.masked_where(~mask, mask)        
-        plt.imshow(im, **kwargs)
-        plt.imshow(mask, alpha=alpha, cmap=ListedColormap([color]))
-
-    def my_imshow(im, title=None, **kwargs):
-        if 'cmap' not in kwargs:
-            kwargs['cmap'] = 'gray'
-        plt.figure()
-        plt.imshow(im, interpolation='none', **kwargs)
-        if title:
-            plt.title(title)
-        plt.axis('off')
-        
-    def run(self, ctx):
         # Taken from http://opensciencecafe.org/2016/01/counting-change-image-analysis-python/
-        api.alert('Processing the image')
+        await api.alert('Processing the image')
         
         # load the image which was loaded through the GUI
-        api.alert('Loading image from: '+self.url)
+        await api.alert('Loading image from: '+self.url)
         image = plt.imread(self.url)
         gray_im = color.rgb2gray(image)
 
@@ -96,14 +79,14 @@ class ImJoyPlugin():
 
         # Watershed Segmentation
         distance_im = ndi.distance_transform_edt(neurons)
-        print api.alert('Distance Transform:' + distance_im.shape + ' ' + distance_im.dtype)
+        await api.alert('Distance Transform:' + diastance_im.shape + ' ' + distance_im.dtype)
     
         peaks_im = feature.peak_local_max(distance_im, indices=False)
 
         markers_im = measure.label(peaks_im)
         labelled_neurons = morphology.watershed(-distance_im, markers_im, mask=neurons)
         num_neurons = len(np.unique(labelled_neurons))-1  # subtract 1 b/c background is labelled 0
-        print api.alert('number of coins: %i' % num_coins)
+        await api.alert('number of coins: %i' % num_coins)
 
         # Plot the result and save as png in order to display it
         fig1, ax = plt.subplots(num='Labelled Neurons')
@@ -132,6 +115,26 @@ class ImJoyPlugin():
                 self.window = await api.createWindow(data_plot)
                 print(f'Could not print to old window. New window created.')
         await api.showMessage('done!')
+        
+
+    def imshow_overlay(im, mask, alpha=0.5, color='red', **kwargs):
+        """Show semi-transparent red mask over an image"""
+        mask = mask > 0
+        mask = np.ma.masked_where(~mask, mask)        
+        plt.imshow(im, **kwargs)
+        plt.imshow(mask, alpha=alpha, cmap=ListedColormap([color]))
+
+    def my_imshow(im, title=None, **kwargs):
+        if 'cmap' not in kwargs:
+            kwargs['cmap'] = 'gray'
+        plt.figure()
+        plt.imshow(im, interpolation='none', **kwargs)
+        if title:
+            plt.title(title)
+        plt.axis('off')
+        
+    def run(self, ctx):
+        print('Hello World')
         
 api.export(ImJoyPlugin())
 </script>
