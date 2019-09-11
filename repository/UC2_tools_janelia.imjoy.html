@@ -4,22 +4,22 @@
 
 <config lang="json">
 {
-  "name": "UC2_tools_janelia",
-  "type": "native-python",
-  "version": "0.1.0",
-  "description": "[This is the backend to process any data which is coming from the cellphone.]",
-  "tags": [],
-  "ui": "",
-  "cover": "",
-  "inputs": null,
-  "outputs": null,
-  "flags": [],
-  "icon": "extension",
-  "api_version": "0.1.6",
-  "env": "",
-  "permissions": [],
-  "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "scipy"],
-  "dependencies": []
+    "name": "UC2_tools_janelia",
+    "type": "native-python",
+    "version": "0.1.0",
+    "description": "[This is the backend to process any data which is coming from the cellphone.]",
+    "tags": [],
+    "ui": "",
+    "cover": "",
+    "inputs": null,
+    "outputs": null,
+    "flags": [],
+    "icon": "extension",
+    "api_version": "0.1.6",
+    "env": "",
+    "permissions": [],
+    "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "scipy"],
+    "dependencies": []
 }
 </config>
 
@@ -30,7 +30,6 @@ from imjoy import api
 class ImJoyPlugin():
 
     import numpy as np
-    import matplotlib.pyplot as plt
     from scipy import ndimage as ndi
     from skimage.morphology import watershed
     from skimage.feature import peak_local_max
@@ -40,28 +39,36 @@ class ImJoyPlugin():
     from skimage.morphology import disk
     from scipy import ndimage as ndi
     from skimage import feature, measure
-
     
+    import matplotlib as mpl
+    mpl.use('Agg')
+    from matplotlib import pyplot as plt
+    
+    plt.ioff()
+
     def setup(self):
+        self.window = None
         api.log('initialized')
 
     def getEngineURL(self):
         return api.ENGINE_URL
 
-    def setParam1(self, p):
-        self.param1 = p
+    def setParam1(self, param):
+        self.param1 = param
 
     def setURL(self, url):
         self.url = url
 
     async def process(self):
         await api.alert('processing with param1='+ str(self.param1))
-
+        from matplotlib import pyplot as plt
+        
         # Taken from http://opensciencecafe.org/2016/01/counting-change-image-analysis-python/
-        await api.alert('Processing the image')
+        # await api.alert('Processing the image')
         
         # load the image which was loaded through the GUI
-        await api.alert('Loading image from: '+self.url)
+        # await api.alert('Loading image from: '+self.url)
+        print(self.url)
         image = plt.imread(self.url)
         gray_im = color.rgb2gray(image)
 
@@ -135,6 +142,6 @@ class ImJoyPlugin():
         
     def run(self, ctx):
         print('Hello World')
-        
+
 api.export(ImJoyPlugin())
 </script>
