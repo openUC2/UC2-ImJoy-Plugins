@@ -5,6 +5,25 @@
  "version": "0.2.0",
  "plugins": [
   {
+   "name": "MinimalNIP",
+   "type": "native-python",
+   "version": "0.1.0",
+   "description": "[TODO: describe this plugin with one sentence.]",
+   "tags": [],
+   "ui": "",
+   "cover": "",
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": "extension",
+   "api_version": "0.1.6",
+   "env": "",
+   "permissions": [],
+   "requirements": [],
+   "dependencies": [],
+   "uri": "repository/MinimalNIP_ew1q365jc.imjoy.html"
+  },
+  {
    "name": "Jamin Lebedeff Reconstruction",
    "type": "window",
    "version": "0.0.2",
@@ -151,6 +170,33 @@
    ],
    "dependencies": [],
    "uri": "repository/UC2_tools_Jamin_Lebedeff.imjoy.html"
+  },
+  {
+   "name": "UploadDemo",
+   "type": "window",
+   "tags": [],
+   "ui": "",
+   "version": "0.1.0",
+   "cover": "",
+   "description": "[TODO: describe this plugin with one sentence.]",
+   "icon": "extension",
+   "inputs": null,
+   "outputs": null,
+   "api_version": "0.1.2",
+   "env": "",
+   "permissions": [],
+   "requirements": [
+    "https://unpkg.com/axios/dist/axios.min.js",
+    "https://unpkg.com/spectre.css/dist/spectre.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-exp.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"
+   ],
+   "dependencies": [],
+   "defaults": {
+    "w": 20,
+    "h": 10
+   },
+   "uri": "repository/UploadDemo_9un8u541n7.imjoy.html"
   }
  ],
  "collections": []
