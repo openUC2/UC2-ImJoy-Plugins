@@ -1,0 +1,47 @@
+<docs lang="markdown">
+[TODO: write documentation for this plugin.]
+</docs>
+
+<config lang="json">
+{
+  "name": "MinimalNIP",
+  "type": "native-python",
+  "version": "0.1.0",
+  "description": "[TODO: describe this plugin with one sentence.]",
+  "tags": [],
+  "ui": "",
+  "cover": "",
+  "inputs": null,
+  "outputs": null,
+  "flags": [],
+  "icon": "extension",
+  "api_version": "0.1.6",
+  "env": "",
+  "permissions": [],
+  "requirements": [],
+  "dependencies": []
+}
+</config>
+
+<script lang="python">
+from imjoy import api
+
+
+class ImJoyPlugin():
+    def setup(self):
+        api.log('initialized')
+
+    def getEngineURL(self):
+        return api.ENGINE_URL
+
+    def setParam1(self, p):
+        self.param1 = p
+
+    async def process(self):
+        await api.alert('processing with param1='+ str(self.param1))
+
+    def run(self, ctx):
+        api.alert('hello world.')
+
+api.export(ImJoyPlugin())
+</script>

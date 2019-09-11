@@ -53,11 +53,12 @@
     
         async def run(self, my):
             api.showStatus('[UC2] Python worker to reconstruct a hologram')
-            print(my.config.chart_type)
+            
 
             # cast the parameters from the GUI
             config = my.config
-            self.reg_tv = config.reg_tv
+            print(config)
+            reg_tv = 1#config.reg_tv
 
 
         async def process_rgb(self, base64_url):
@@ -74,9 +75,11 @@
             # open the image as PIL image
             img = Image.open(buffer)
             arr = np.array(img)
+            print('Mysize: ')
+            print(arr.shape)
             
             # process the image
-            await self.jlrecon(arr, self.reg_tv)
+            await self.jlrecon(arr, reg_tv=1.)
     
 
         async def jlrecon(self, myjl, reg_tv):
@@ -92,7 +95,7 @@
             mymatfile = 'JL_tensorflow.mat'
         
             '''Start Code here'''
-            myroisize = 750 # a subregion of the image will be cropped around the center in order to reduce the computational time
+            myroisize = 512 # a subregion of the image will be cropped around the center in order to reduce the computational time
             use_mask = False # do you want to use a mas for restricting the recovery?
     
             # Fitting-related
@@ -121,6 +124,7 @@
                 myimage = plt.imread(mydatafolder + myimagefile)
             else:
                 myimage = myjl
+                print(myjl.shape)
             
             myimage_size = myimage.shape
             myimage = myimage[myimage_size[0]//2-myroisize//2:myimage_size[0]//2+myroisize//2,
