@@ -25,26 +25,26 @@
 
 <script lang="python">
 from imjoy import api
+import numpy as np
+from scipy import ndimage as ndi
+from skimage.morphology import watershed
+from skimage.feature import peak_local_max
+from skimage import color
+from skimage.filters import threshold_otsu
+from skimage import morphology
+from skimage.morphology import disk
+from scipy import ndimage as ndi
+from skimage import feature, measure
+from PIL import Image
+import base64
 
+import matplotlib as mpl
+mpl.use('Agg')
+from matplotlib import pyplot as plt
+
+plt.ioff()
 
 class ImJoyPlugin():
-
-    import numpy as np
-    from scipy import ndimage as ndi
-    from skimage.morphology import watershed
-    from skimage.feature import peak_local_max
-    from skimage import color
-    from skimage.filters import threshold_otsu
-    from skimage import morphology
-    from skimage.morphology import disk
-    from scipy import ndimage as ndi
-    from skimage import feature, measure
-    
-    import matplotlib as mpl
-    mpl.use('Agg')
-    from matplotlib import pyplot as plt
-    
-    plt.ioff()
 
     def setup(self):
         self.window = None
@@ -61,42 +61,40 @@ class ImJoyPlugin():
 
     async def process(self):
         await api.alert('processing with param1='+ str(self.param1))
-        from matplotlib import pyplot as plt
         
         # Taken from http://opensciencecafe.org/2016/01/counting-change-image-analysis-python/
         # await api.alert('Processing the image')
         
         # load the image which was loaded through the GUI
         # await api.alert('Loading image from: '+self.url)
-        image = plt.imread(self.url)
-        gray_im = color.rgb2gray(image)
+        myimage = np.array(Image.open(self.url)) #myimage = plt.imread()
+        myimage_gray = color.rgb2gray(myimage)
 
         # Adaptive Thresholding the image 
-        thresh = threshold_otsu(gray_im, nbins=5)
-        thresh_im = gray_im > thresh_im
+        thresh = threshold_otsu(myimage_gray, nbins=5)
+        thresh_im = myimage_gray > thresh
 
         # Cleaning up the mask
         no_small = morphology.remove_small_objects(thresh_im, min_size=150)
         neurons = morphology.binary_closing(no_small,disk(3))
 
         # Masking
-        im[neurons==False] = 0
-        gray_im[neurons==False] = 0
+        myimage[neurons==False] = 0
+        myimage_gray[neurons==False] = 0
 
         # Watershed Segmentation
         distance_im = ndi.distance_transform_edt(neurons)
-        await api.alert('Distance Transform:' + diastance_im.shape + ' ' + distance_im.dtype)
-    
+        
         peaks_im = feature.peak_local_max(distance_im, indices=False)
 
         markers_im = measure.label(peaks_im)
         labelled_neurons = morphology.watershed(-distance_im, markers_im, mask=neurons)
         num_neurons = len(np.unique(labelled_neurons))-1  # subtract 1 b/c background is labelled 0
-        await api.alert('number of coins: %i' % num_coins)
+        await api.alert('number of neurons: %i' % num_neurons)
 
         # Plot the result and save as png in order to display it
         fig1, ax = plt.subplots(num='Labelled Neurons')
-        plt.imshow(labelled_coins,cmap='jet')
+        plt.imshow(labelled_neurons,cmap='jet')
         name_plot = 'MyNeurons.png'
         plt.savefig(name_plot,dpi=300)
         with open(name_plot, 'rb') as f:
