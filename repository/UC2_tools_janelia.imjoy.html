@@ -18,7 +18,7 @@
     "api_version": "0.1.6",
     "env": "",
     "permissions": [],
-    "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "scipy"],
+    "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "scipy", "requests"],
     "dependencies": []
 }
 </config>
@@ -68,7 +68,6 @@ class ImJoyPlugin():
         
         # load the image which was loaded through the GUI
         # await api.alert('Loading image from: '+self.url)
-        print(self.url)
         image = plt.imread(self.url)
         gray_im = color.rgb2gray(image)
 
@@ -145,3 +144,4 @@ class ImJoyPlugin():
 
 api.export(ImJoyPlugin())
 </script>
+    
