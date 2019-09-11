@@ -56,6 +56,7 @@ class ImJoyPlugin {
       })
       const param1 = document.getElementById("param1");
       await plugin.setParam1(param1.value)
+      await plugin.setURL(upload_url)
       await plugin.process()
     }
   }
