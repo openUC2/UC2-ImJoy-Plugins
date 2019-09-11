@@ -1,17 +1,16 @@
 <docs lang="markdown">
-[# Upload Demo
-This describes how to upload and process an image through the GUI.]
+[We want to segment some images we shot with a phone.]
 </docs>
 
 <config lang="json">
 {
-  "name": "UC2 Upload Demo",
+  "name": "UC2 Janelia Workshop",
   "type": "window",
   "tags": [],
   "ui": "",
   "version": "0.1.0",
   "cover": "",
-  "description": "[This describes how to upload and process an image through the GUI.]",
+  "description": "[This is a boilerplate for an UC2 ImJoy plugin.]",
   "icon": "extension",
   "inputs": null,
   "outputs": null,
@@ -23,7 +22,7 @@ This describes how to upload and process an image through the GUI.]
     "https://unpkg.com/spectre.css/dist/spectre.min.css",
     "https://unpkg.com/spectre.css/dist/spectre-exp.min.css",
     "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"],
-  "dependencies": ["bionanoimaging/UC2-ImJoy-GIT:UC2_nip_demo"],
+  "dependencies": ["bionanoimaging/UC2-ImJoy-GIT:UC2_tools_janelia"],
   "defaults": {"w": 20, "h": 10}
 }
 </config>
@@ -33,8 +32,8 @@ This describes how to upload and process an image through the GUI.]
 class ImJoyPlugin {
   async setup() {
     api.log('initialized')
-    // asuming you have a python plugin named "MinimalNIP", with a function named "getEngineURL" which returns api.ENGINE_URL, and another function "setParam1".
-    const plugin = await api.getPlugin("UC2_nip_demo")
+    // asuming you have a python plugin named "UC2_tools_janelia", with a function named "getEngineURL" which returns api.ENGINE_URL, and another function "setParam1".
+    const plugin = await api.getPlugin("UC2_tools_janelia")
     const engine_url = await plugin.getEngineURL() // 'https://imjoy.pasteur.cloud'
     const fileInput = document.getElementById("file-input");
     // If user selected a new file or take a new photo, load it and do prediction.
