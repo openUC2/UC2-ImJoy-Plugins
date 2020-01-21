@@ -39,7 +39,7 @@ class ImJoyPlugin {
     // If user selected a new file or take a new photo, load it and do prediction.
     window.process = async ()=>{
       const file = fileInput.files[0]
-      const upload_url = await api.requestUploadUrl({path: 'test.jpg', overwrite: true, engine: engine_url})
+      const upload_url = await api.requestUploadUrl({path: 'tmp.jpg', overwrite: true, engine: engine_url})
       const bodyFormData = new FormData();
       bodyFormData.append(
         "file",
