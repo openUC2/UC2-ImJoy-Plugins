@@ -88,6 +88,35 @@
    "uri": "repository/UC2_GUI_UploadDemo.imjoy.html"
   },
   {
+   "name": "UC2 Workshop Oslo",
+   "type": "window",
+   "tags": [],
+   "ui": "",
+   "version": "0.1.0",
+   "cover": "",
+   "description": "[This is a boilerplate for an UC2 ImJoy plugin.]",
+   "icon": "extension",
+   "inputs": null,
+   "outputs": null,
+   "api_version": "0.1.2",
+   "env": "",
+   "permissions": [],
+   "requirements": [
+    "https://unpkg.com/axios/dist/axios.min.js",
+    "https://unpkg.com/spectre.css/dist/spectre.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-exp.min.css",
+    "https://unpkg.com/spectre.css/dist/spectre-icons.min.css"
+   ],
+   "dependencies": [
+    "bionanoimaging/UC2-ImJoy-GIT:UC2_tools_oslo"
+   ],
+   "defaults": {
+    "w": 20,
+    "h": 10
+   },
+   "uri": "repository/UC2_GUI_Workshop_OSLO.imjoy.html"
+  },
+  {
    "name": "Minimal NIP Example for ImJoy",
    "type": "window",
    "version": "0.0.2",
@@ -214,7 +243,7 @@
    "name": "UC2_tools_janelia",
    "type": "native-python",
    "version": "0.1.0",
-   "description": "[TODO: describe this plugin with one sentence.]",
+   "description": "[This is the backend to process any data which is coming from the cellphone.]",
    "tags": [],
    "ui": "",
    "cover": "",
@@ -225,9 +254,43 @@
    "api_version": "0.1.6",
    "env": "",
    "permissions": [],
-   "requirements": [],
+   "requirements": [
+    "numpy",
+    "matplotlib",
+    "pillow",
+    "scikit-image",
+    "scipy",
+    "requests"
+   ],
    "dependencies": [],
    "uri": "repository/UC2_tools_janelia.imjoy.html"
+  },
+  {
+   "name": "UC2_tools_janelia",
+   "type": "native-python",
+   "version": "0.1.0",
+   "description": "[This is the backend to process any data which is coming from the cellphone.]",
+   "tags": [],
+   "ui": "",
+   "cover": "",
+   "inputs": null,
+   "outputs": null,
+   "flags": [],
+   "icon": "extension",
+   "api_version": "0.1.6",
+   "env": "",
+   "permissions": [],
+   "requirements": [
+    "numpy",
+    "matplotlib",
+    "pillow",
+    "scikit-image",
+    "scipy",
+    "cv2",
+    "requests"
+   ],
+   "dependencies": [],
+   "uri": "repository/UC2_tools_oslo.imjoy.html"
   }
  ],
  "collections": []
