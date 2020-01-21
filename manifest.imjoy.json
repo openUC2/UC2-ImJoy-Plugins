@@ -266,7 +266,7 @@
    "uri": "repository/UC2_tools_janelia.imjoy.html"
   },
   {
-   "name": "UC2_tools_janelia",
+   "name": "UC2_tools_oslo",
    "type": "native-python",
    "version": "0.1.0",
    "description": "[This is the backend to process any data which is coming from the cellphone.]",
