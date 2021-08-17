@@ -11,13 +11,14 @@ Created on Tue Jan 21 10:30:06 2020
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-import NanoImagingPack as nip
+
 # loading image
-mysize = 1500
+mysize = 750
 myblurkernel = 15 # must be odd
 myimage = plt.imread('20200120-MEAS-Custom--1.jpg',)
 myimage = np.squeeze(myimage[:,:,1])
-myimage = nip.extract(myimage, (mysize,mysize))
+mycenter_x, mycenter_y = (myimage.shape[0]//2, myimage.shape[1]//2)
+myimage = myimage[mycenter_x-mysize:mycenter_x+mysize, mycenter_y-mysize:mycenter_y+mysize]
 
 # remove noise
 myimage_blur = cv2.GaussianBlur(myimage,(myblurkernel,myblurkernel),0)
@@ -29,9 +30,10 @@ sobely = cv2.Sobel(myimage_blur,cv2.CV_64F,0,1,ksize=5)  # y
 
 mygradient = np.sqrt(sobelx**2+sobely**2)
 myedge = mygradient>(np.max(mygradient)*.3 )
-nip.view(myedge)
 
-plt.subplot(2,3,1),plt.imshow(myimg,cmap = 'gray')
+
+#%%
+plt.subplot(2,3,1),plt.imshow(myimage,cmap = 'gray')
 plt.title('Original'), plt.xticks([]), plt.yticks([])
 plt.subplot(2,3,2),plt.imshow(laplacian,cmap = 'gray')
 plt.title('Laplacian'), plt.xticks([]), plt.yticks([])

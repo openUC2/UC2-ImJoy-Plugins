@@ -1,0 +1,154 @@
+<docs lang="markdown">
+[TODO: write documentation for this plugin.]
+</docs>
+
+<config lang="json">
+{
+    "name": "UC2_tools_oslo",
+    "type": "native-python",
+    "version": "0.1.0",
+    "description": "[This is the backend to process any data which is coming from the cellphone.]",
+    "tags": [],
+    "ui": "",
+    "cover": "",
+    "inputs": null,
+    "outputs": null,
+    "flags": [],
+    "icon": "extension",
+    "api_version": "0.1.6",
+    "env": "",
+    "permissions": [],
+    "requirements": ["numpy", "matplotlib", "pillow", "scikit-image", "scipy", "opencv-python", "requests"],
+    "dependencies": []
+}
+</config>
+
+<script lang="python">
+from imjoy import api
+import numpy as np
+from scipy import ndimage as ndi
+from skimage.morphology import watershed
+from skimage.feature import peak_local_max
+from skimage import color
+from skimage.filters import threshold_otsu
+from skimage import morphology
+from skimage.morphology import disk
+from scipy import ndimage as ndi
+from skimage import feature, measure
+from PIL import Image
+import base64
+
+import matplotlib as mpl
+mpl.use('Agg')
+from matplotlib import pyplot as plt
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+import NanoImagingPack as nip
+
+
+plt.ioff()
+
+class ImJoyPlugin():
+
+    def setup(self):
+        self.window = None
+        api.log('initialized')
+
+    def getEngineURL(self):
+        return api.ENGINE_URL
+
+    def setParam1(self, param):
+        self.param1 = param
+
+    def setURL(self, url):
+        self.url = url
+
+    async def process(self):
+        await api.alert('processing with a blur-kernel of ='+ str(self.param1))
+
+        # Taken from http://opensciencecafe.org/2016/01/counting-change-image-analysis-python/
+        # await api.alert('Processing the image')
+
+        # load the image which was loaded through the GUI
+        # await api.alert('Loading image from: '+self.url)
+        myimage = np.array(Image.open(self.url)) #myimage = plt.imread()
+
+
+        # loading image
+        mysize = 750
+        myblurkernel = 15 # must be odd
+        # myimage = plt.imread('20200120-MEAS-Custom--1.jpg',)
+        myimage = np.squeeze(myimage[:,:,1])
+        mycenter_x, mycenter_y = (myimage.shape[0]//2, myimage.shape[1]//2)
+        myimage = myimage[mycenter_x-mysize:mycenter_x+mysize, mycenter_y-mysize:mycenter_y+mysize]
+
+        # remove noise
+        myimage_blur = cv2.GaussianBlur(myimage,(myblurkernel,myblurkernel),0)
+
+        # convolute with proper kernels
+        laplacian = cv2.Laplacian(myimage_blur,cv2.CV_64F)
+        sobelx = cv2.Sobel(myimage_blur,cv2.CV_64F,1,0,ksize=5)  # x
+        sobely = cv2.Sobel(myimage_blur,cv2.CV_64F,0,1,ksize=5)  # y
+
+        mygradient = np.sqrt(sobelx**2+sobely**2)
+        myedge = mygradient>(np.max(mygradient)*.3 )
+
+        # remove noise
+        myimage_blur = cv2.GaussianBlur(myimage,(myblurkernel,myblurkernel),0)
+
+        # convolute with proper kernels
+        laplacian = cv2.Laplacian(myimage_blur,cv2.CV_64F)
+        sobelx = cv2.Sobel(myimage_blur,cv2.CV_64F,1,0,ksize=5)  # x
+        sobely = cv2.Sobel(myimage_blur,cv2.CV_64F,0,1,ksize=5)  # y
+
+        # compute some fused gradient to cget the edges
+        mygradient = np.sqrt(sobelx**2+sobely**2)
+        myedge = mygradient>(np.max(mygradient)*.3 )
+        nip.view(myedge)
+
+        #%%
+        plt.subplot(2,3,1),plt.imshow(myimage,cmap = 'gray')
+        plt.title('Original'), plt.xticks([]), plt.yticks([])
+        plt.subplot(2,3,2),plt.imshow(laplacian,cmap = 'gray')
+        plt.title('Laplacian'), plt.xticks([]), plt.yticks([])
+        plt.subplot(2,3,3),plt.imshow(sobelx,cmap = 'gray')
+        plt.title('Sobel X'), plt.xticks([]), plt.yticks([])
+        plt.subplot(2,3,4),plt.imshow(sobely,cmap = 'gray')
+        plt.title('Sobel Y'), plt.xticks([]), plt.yticks([])
+        plt.subplot(2,3,5),plt.imshow(mygradient,cmap = 'gray')
+        plt.title('mygradient'), plt.xticks([]), plt.yticks([])
+        plt.subplot(2,3,6),plt.imshow(myedge,cmap = 'gray')
+        plt.title('myedge'), plt.xticks([]), plt.yticks([])
+
+        name_plot = 'MyGradient.png'
+        plt.savefig(name_plot,dpi=300)
+        with open(name_plot, 'rb') as f:
+            data = f.read()
+            result = base64.b64encode(data).decode('ascii')
+            imgurl = 'data:image/png;base64,' + result
+            data = {"src": imgurl}
+            data_plot = {
+                'name':'Plot charts: show png',
+                'type':'imjoy/image',
+                'w':16, 'h':20,
+                'data':data}
+        ## Check if window was defined
+        if self.window is None:
+            self.window = await api.createWindow(data_plot)
+            print(f'Window created')
+        else:
+            print(f'Update window.')
+            try:
+                await self.window.run(data=data)
+            except:
+                self.window = await api.createWindow(data_plot)
+                print(f'Could not print to old window. New window created.')
+        await api.showMessage('done!')
+
+
+    def run(self, ctx):
+        print('Hello World')
+
+api.export(ImJoyPlugin())
+</script>
