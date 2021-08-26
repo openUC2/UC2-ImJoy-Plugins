@@ -1,0 +1,76 @@
+<docs lang="markdown">
+[TODO: write documentation for this plugin.]
+</docs>
+
+<config lang="json">
+{
+  "name": "WindowPlugin",
+  "type": "window",
+  "tags": [],
+  "ui": "",
+  "version": "0.1.0",
+  "cover": "",
+  "description": "[TODO: describe this plugin with one sentence.]",
+  "icon": "extension",
+  "inputs": null,
+  "outputs": null,
+  "api_version": "0.1.8",
+  "env": "",
+  "permissions": [],
+  "requirements": [],
+  "dependencies": [],
+  "defaults": {"w": 20, "h": 10}
+}
+</config>
+
+<script lang="javascript">
+class ImJoyPlugin {
+  async setup() {
+    const buttonElem = document.getElementById('run-btn')
+    buttonElem.onclick = ()=>{
+        const fileElem_fg = document.getElementById('file_fg')
+        const fileElem_bg = document.getElementById('file_bg')
+        const file_fg = fileElem_fg.files[0]
+        const file_bg = fileElem_bg.files[0]  
+
+        if(!file_fg){
+            api.alert("No file_fg selected")
+            return
+        }
+        if(!file_bg){
+            api.alert("No file_fg selected")
+            return
+        }
+        const reader_fg = new FileReader();
+        const reader_bg = new FileReader();
+        reader_fg.onload = async function() {
+            const plugin = await api.getPlugin('PythonPlugin')
+            await plugin.process(file_fg.name, file_bg.name, this.result)
+        }
+
+        reader_fg.readAsArrayBuffer(file_fg);
+        reader_bg.readAsArrayBuffer(file_bg);
+    }
+  }
+
+  async run(ctx) {
+    
+    
+    
+  }
+}
+
+api.export(new ImJoyPlugin())
+</script>
+
+<window lang="html">
+  <div>
+    <input type="file" id="file_fg">
+    <input type="file" id="file_bg">
+    <button id="run-btn">Run</button>
+  </div>
+</window>
+
+<style lang="css">
+
+</style>
