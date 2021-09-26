@@ -1,7 +1,6 @@
 <docs lang="markdown">
 [TODO: write documentation for this plugin.]
 </docs>
-
 <config lang="json">
 {
   "name": "WindowPlugin",
@@ -22,17 +21,25 @@
   "defaults": {"w": 20, "h": 10}
 }
 </config>
-
 <script lang="javascript">
+function readFile(file){
+    return new Promise((resolve, reject)=>{
+        const reader = new FileReader();
+        reader.onload = function(){
+            resolve(this.result)
+        }
+        reader.onerror = reject
+        reader.readAsArrayBuffer(file);
+    })
+}
 class ImJoyPlugin {
   async setup() {
     const buttonElem = document.getElementById('run-btn')
-    buttonElem.onclick = ()=>{
+    buttonElem.onclick = async ()=>{
         const fileElem_fg = document.getElementById('file_fg')
         const fileElem_bg = document.getElementById('file_bg')
         const file_fg = fileElem_fg.files[0]
         const file_bg = fileElem_bg.files[0]  
-
         if(!file_fg){
             api.alert("No file_fg selected")
             return
@@ -41,28 +48,19 @@ class ImJoyPlugin {
             api.alert("No file_fg selected")
             return
         }
-        const reader_fg = new FileReader();
-        const reader_bg = new FileReader();
-        reader_fg.onload = async function() {
-            const plugin = await api.getPlugin('PythonPlugin')
-            await plugin.process(file_fg.name, file_bg.name, this.result)
-        }
-
-        reader_fg.readAsArrayBuffer(file_fg);
-        reader_bg.readAsArrayBuffer(file_bg);
+        
+        const plugin = await api.getPlugin('PythonPlugin')
+        await plugin.process(file_fg.name, file_bg.name, await readFile(file_fg), await readFile(file_bg))
     }
   }
-
   async run(ctx) {
     
     
     
   }
 }
-
 api.export(new ImJoyPlugin())
 </script>
-
 <window lang="html">
   <div>
     <input type="file" id="file_fg">
@@ -70,7 +68,5 @@ api.export(new ImJoyPlugin())
     <button id="run-btn">Run</button>
   </div>
 </window>
-
 <style lang="css">
-
 </style>
